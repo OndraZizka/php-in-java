@@ -72,7 +72,7 @@ public class PHP {
 	 * <li>A <b>remote script</b> reference, taking the form <code>http://path/to/script</code></li>
      * <li>All other forms are assumed to be <b>file</b> references, referring to files available locally</li>
      * </ul>
-     * @param String An initial PHP script to load or a local directory 
+     * @param url An initial PHP script to load or a local directory 
 	 */
 	public PHP(String url) {
 		this(url, PHP.class.getClassLoader());
@@ -155,15 +155,29 @@ public class PHP {
 			ws.setNewlineString("\n");
 			
 			env = getQuercus().createEnv(page, ws, request, response);
+			
+			set("request", request);
+			set("response", response);
 		}
 	}
 	
+	/**
+	 * Retrieves the Quercus execution environment, which your Java code
+	 * can use to interact directly with the Quercus parsing engine.
+	 * @see http://www.caucho.com/resin-javadoc/com/caucho/quercus/env/Env.html
+	 * @throws IllegalStateException When environment has not yet been initialized
+	 */
 	public final Env getEnv() {
 		if (env == null)
 			throw new IllegalStateException("Environment not yet initialized");	
 		return env;
 	}
 	
+	/**
+	 * Set the value of a global variable in the PHP execution environment.
+	 * @param name The name of the global parameter to create/update
+	 * @param obj The value to store there
+	 */
 	public PHP set(String name, Object obj) {
 		env.setGlobalValue(name, env.wrapJava(obj));
 		return this;
@@ -194,6 +208,8 @@ public class PHP {
 	}
 	
 	public String run() {
+		
+		
 		
 		return null;
 	}

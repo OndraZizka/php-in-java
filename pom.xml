@@ -38,6 +38,13 @@
 	  <version>2.5</version>
     </dependency>
 
+	<!-- mail: -->
+	<dependency>
+	  <groupId>javax.mail</groupId>
+	  <artifactId>mail</artifactId>
+	  <version>1.4.1</version>
+    </dependency>
+
 	<!-- spring mock: -->
 	<dependency>
 	  <groupId>org.springframework</groupId>
