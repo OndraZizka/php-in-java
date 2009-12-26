@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.collegeman.phpinjava</groupId>
+  <artifactId>php-in-java</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0.0</version>
+  <name>php-in-java</name>
+  <url>http://aaroncollegeman.com/projects/php-in-java</url>
+
+  <build>
+	<plugins>
+	  <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<configuration>
+		  <source>1.5</source>
+		  <target>1.5</target>
+		</configuration>
+	   </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+	
+	<!-- junit: -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+	<!-- servlet API: -->
+	<dependency>
+	  <groupId>javax.servlet</groupId>
+	  <artifactId>servlet-api</artifactId>
+	  <version>2.5</version>
+    </dependency>
+
+	<!-- spring mock: -->
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-test</artifactId>
+      <version>2.5.6</version>
+    </dependency>
+	
+	<!-- groovy: -->
+	<dependency>
+	  <groupId>org.codehaus.groovy</groupId>
+	  <artifactId>groovy-all</artifactId> 
+	  <version>1.7.0</version>
+	</dependency>
+	
+	<!-- quercus: -->
+	<dependency>
+	  <groupId>com.coucho</groupId>
+	  <artifactId>quercus</artifactId>
+	  <version>3.1</version>
+    </dependency>
+    <dependency>
+	  <groupId>com.coucho</groupId>
+	  <artifactId>resin-support</artifactId>
+	  <version>3.1</version>
+    </dependency>
+    <dependency>
+	  <groupId>com.coucho</groupId>
+	  <artifactId>resin-util</artifactId>
+	  <version>3.1</version>
+	</dependency>
+  </dependencies>
+</project>
