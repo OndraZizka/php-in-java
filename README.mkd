@@ -1,0 +1,37 @@
+#PHP-in-Java: execute PHP code from within Java and Groovy
+
+##Introduction
+
+###Why would I want to execute PHP from within my Java code?
+
+As a consultant, I have spent a lot of time moving back and forth between two Open Source
+communities: Java and PHP. Despite some major criticisms against its verbosity and depth,
+Java has left an indelible mark on software development and developers. If there's a 
+programming problem to be solved, odds are you can find a solution or a pattern for solving
+it in the Java ecosystem.
+
+But long before Java was usable for writing Web applications, PHP was making it possible for a
+host of new developers to write CGI scripts without shouldering the burden of learning PERL
+or C. Like Java, PHP's ecosystem is thriving, especially given its adoption at the heart of
+many major Web companies the likes of Facebook and [Squidoo](http://www.squidoo.com).
+
+Essentially, what we have are two beautiful worlds of software, and a lot of overlap. But
+where they don't overlap, I seem to find myself working in one language and longing for the
+features of the other. For some time now it has been possible to access [Java code from
+within PHP](http://www.php.net/manual/en/java.examples-basic.php). But accessing PHP from
+within Java has never been as straight-forward.
+
+###So, how does it work?
+
+As it turns out, years ago an enterprising company named [Caucho](http://caucho.com) 
+decided to write the "most reliable application server in the Open Source market." Their
+core product is a Java EE compliant Web server they call *Resin*, and at its core is *Quercus*:
+a fast PHP interpreter written in cross-platform Java.
+
+And if your goal is to run PHP in a Java EE Web container, then you've found a great tool. 
+
+But I wondered if I could use Quercus from within any old Java application, and finally gain
+access to my favorite PHP libraries from within Java.  As it turns out, this is quite possible. 
+I've recently pushed out my first Java-wrapped PHP library: [GeSHi4J](http://github.com/collegeman/geshi4j),
+my favorite code highlighting library is now available to me in any Java application.
+
