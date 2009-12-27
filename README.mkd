@@ -74,7 +74,7 @@ The return type of the `fx(String, Object ... args)` method is an instance of ou
 * invoke object methods with `invokeMethod(String name, Object ... args)`
 * gain direct access to the wrapped `Value` object through `getWrappedValue()`
 
-
+ 
 ####Setting and reading global variables
 
 	// write
