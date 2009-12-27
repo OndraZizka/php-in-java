@@ -30,8 +30,14 @@ a fast PHP interpreter written in cross-platform Java.
 
 And if your goal is to run PHP in a Java EE Web container, then you've found a great tool. 
 
-But I wondered if I could use Quercus from within any old Java application, and finally gain
+But I wondered if I could use Quercus from within any old Java application, and at along last gain
 access to my favorite PHP libraries from within Java.  As it turns out, this is quite possible. 
 I've recently pushed out my first Java-wrapped PHP library: [GeSHi4J](http://github.com/collegeman/geshi4j),
-my favorite code highlighting library is now available to me in any Java application.
+my favorite code highlighting library is now available to me in any Java application!
+
+##Writing Your own Wrappers
+
+
+
+
 

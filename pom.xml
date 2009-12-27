@@ -4,7 +4,7 @@
   <groupId>net.collegeman.phpinjava</groupId>
   <artifactId>php-in-java</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <name>php-in-java</name>
   <url>http://aaroncollegeman.com/projects/php-in-java</url>
 
@@ -22,7 +22,7 @@
 	     <groupId>org.apache.maven.plugins</groupId>
 	     <artifactId>maven-javadoc-plugin</artifactId>
 	     <configuration>
-		   <reportOutputDirectory>${project.build.directory}/../</reportOutputDirectory>
+		   <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
 		   <destDir>javadoc</destDir>
 		 </configuration>
 	   </plugin>
