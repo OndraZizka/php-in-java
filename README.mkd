@@ -56,9 +56,7 @@ The first is calling global functions, as follows
 
 	PHPObject returnValue = php.fx("function_name", arg1, arg2, ...);
 	
-The return type for the `fx(String, Object ... args)` method is an instance of our [`PHPObject`](http://aaroncollegeman.com/static/projects/php-in-java/javadoc/net/collegeman/phpinjava/PHPObject.html) class,
-which wraps a special kind of Quercus object called [`Value`](http://www.caucho.com/resin-javadoc/com/caucho/quercus/env/Value.html). Through our `PHPObject`
-API you can 
+The return type for the `fx(String, Object ... args)` method is an instance of our <a href="http://aaroncollegeman.com/static/projects/php-in-java/javadoc/net/collegeman/phpinjava/PHPObject.html">`PHPObject`</a> class, which wraps a special kind of Quercus object called <a href="http://www.caucho.com/resin-javadoc/com/caucho/quercus/env/Value.html">`Value`</a>. Through our `PHPObject` API you can 
 
 * retrieve a `String` version of the `Value`'s content with `toString()`
 * read/write object properties with `getProperty(String property)` and `setProperty(String property, Object newValue)`
