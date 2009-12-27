@@ -215,7 +215,7 @@ If you require access to these methods or any other aspect of Quercus, you can a
 with the method `PHP#getEnv()` and `GroovyPHP#getEnv()`, each returning an instance of <a href="http://www.caucho.com/resin-javadoc/com/caucho/quercus/env/Env.html">Env</a>,
 thus exposing the interpreter API to your own code in totality.
 
-If you need to make reference to it without download the project, you can browse our [javadoc online](http://aaroncollegeman.com/static/projects/java-in-php/javadoc).
+If you need to make reference to it without downloading this project, you can browse our [javadoc online](http://aaroncollegeman.com/static/projects/java-in-php/javadoc).
 
 **Good luck, and happy coding.**
 
