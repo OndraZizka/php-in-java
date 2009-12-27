@@ -52,13 +52,78 @@ simple file path), or remotely via HTTP.
 	
 Once loaded into memory, several execution options become available to you.
 
-The first is calling global functions, as follows
+####Calling global functions
+
+Like so
 
 	PHPObject returnValue = php.fx("function_name", arg1, arg2, ...);
 	
-The return type for the `fx(String, Object ... args)` method is an instance of our <a href="http://aaroncollegeman.com/static/projects/php-in-java/javadoc/net/collegeman/phpinjava/PHPObject.html">`PHPObject`</a> class, which wraps a special kind of Quercus object called <a href="http://www.caucho.com/resin-javadoc/com/caucho/quercus/env/Value.html">`Value`</a>. Through our `PHPObject` API you can 
+	// or...
+	PHPObject returnValue = php.fx("function_name", new Object[]{arg1, arg2});
+	
+	// or...
+	List args = new ArrayList<Object>();
+	params.add(arg1);
+	params.add(arg2);
+	PHPObject returnValue = php.fx("function_name", args.toArray());
+	
+The return type of the `fx(String, Object ... args)` method is an instance of our <a href="http://aaroncollegeman.com/static/projects/php-in-java/javadoc/net/collegeman/phpinjava/PHPObject.html">`PHPObject`</a> class, which wraps a special kind of Quercus object called <a href="http://www.caucho.com/resin-javadoc/com/caucho/quercus/env/Value.html">`Value`</a>. Through our `PHPObject` API you can 
 
 * retrieve a `String` version of the `Value`'s content with `toString()`
 * read/write object properties with `getProperty(String property)` and `setProperty(String property, Object newValue)`
 * invoke object methods with `invokeMethod(String name, Object ... args)`
 * gain direct access to the wrapped `Value` object through `getWrappedValue()`
+
+####Setting and reading global variables
+
+	// write
+	php.set("variable_name", value);
+	
+	// read
+	PHPObject value = php.get("variable_name");
+	
+####Instantiating PHP classes
+
+	// create instance
+	PHPObject myInstance = php.newInstance("MyPHPClass", arg1, arg2, ...);
+	
+	// read and write properties
+	PHPObject propertyValue = myInstance.getProperty("propertyName");
+	myInstance.setProperty("propertyName", newValue);
+	
+	// invoke methods
+	PHPObject returnValue = myInstance.invokeMethod("methodName", arg1, arg2, ...);
+	
+####Capturing the output of your script
+
+	// load a script
+	PHP myScript = new PHP("classpath:/path/to/myscript.php");
+	
+	// do stuff with your script
+	myScript.set("global_variable", "foo");
+	myScript.fx("process_foo");
+	
+	// capture output
+	String output = myScript.toString();	
+	
+####Executing arbitrary snippets of PHP
+
+	// when no other scripts have yet been parsed
+	PHP php = new PHP();
+	php.snippet("<?php echo 'Hello, world!'");
+	String output = php.toString(); // == "Hello, world!"
+	
+	// and when a script block is already open
+	PHP php = new PHP("classpath:/path/to/myscript.php");
+	php.snippet("my_function('foo', 'bar');");
+	String output = php.toString();
+	
+	
+
+	
+	
+
+	
+
+
+
