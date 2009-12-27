@@ -35,9 +35,32 @@ access to my favorite PHP libraries from within Java.  As it turns out, this is 
 I've recently pushed out my first Java-wrapped PHP library: [GeSHi4J](http://github.com/collegeman/geshi4j),
 my favorite code highlighting library is now available to me in any Java application!
 
-##Writing Your own Wrappers
+##Writing Your Own Wrappers
 
+###Using the PHP wrapper API
 
+The following examples, while not practical on an individual basis, should be used in
+combination to create great PHP wrappers.
 
+####Executing a PHP script
 
+PHP scripts may be loaded from the classpath (my personal favorite, as the scripts end up packed 
+with the Java code in a JAR file), loaded from the local file system (by a `File` object or a
+simple file path), or remotely via HTTP.
 
+	PHP php = new PHP("classpath:/com/faux/php/HelloWorld.php");
+	
+Once loaded into memory, several execution options become available to you.
+
+The first is calling global functions, as follows
+
+	PHPObject returnValue = php.fx("function_name", arg1, arg2, ...);
+	
+The return type for the `fx(String, Object ... args)` method is an instance of our `[PHPObject](http://aaroncollegeman.com/static/projects/php-in-java/javadoc/net/collegeman/phpinjava/PHPObject.html)` class,
+which wraps a special kind of Quercus object called `[Value](http://www.caucho.com/resin-javadoc/com/caucho/quercus/env/Value.html)`. Through our `PHPObject`
+API you can 
+
+* retrieve a `String` version of the `Value`'s content with `toString()`
+* read/write object properties with `getProperty(String property)` and `setProperty(String property, Object newValue)`
+* invoke object methods with `invokeMethod(String name, Object ... args)`
+* gain direct access to the wrapped `Value` object through `getWrappedValue()`
