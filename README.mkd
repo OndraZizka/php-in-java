@@ -150,7 +150,7 @@ the native PHP API and your Java-based implementation of the same.
 
 The best example for writing your own wrapper is my wrapper for GeSHi: [GeSHi4J](http://github.com/collegeman/geshi4j).
 
-If you've written your own PHP wrapper with PHP-in-Java, [follow me on Twitter](http://twitter.com/collegeman) or [Github](http://github.com/collegeman),
+If you've written your own PHP wrapper with PHP-in-Java, [follow me on Twitter](http://twitter.com/collegeman) or [GitHub](http://github.com/collegeman),
 and message me with the URL to your own project.
 
 ###GroovyPHP and GroovyPHPObject
