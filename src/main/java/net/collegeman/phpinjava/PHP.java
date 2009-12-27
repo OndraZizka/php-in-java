@@ -26,8 +26,9 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.page.*;
 
 import java.util.logging.*;
-import java.net.URL;
+import java.net.*;
 import java.io.*;
+import java.util.*;
 
 import org.springframework.mock.web.*;
 
@@ -45,7 +46,7 @@ import org.springframework.mock.web.*;
  * <li>compile and cache arbitrary snippets of PHP, composed from within Java</li>
  * </ul>
  * <h3>Quercus and Resin versus PHP-in-Java</h3>
- * <p>Quercus is a PHP interpreter written and distributed by <a href="http://coucho.com">Coucho</a>.
+ * <p>Quercus is a PHP interpreter written and distributed by <a href="http://caucho.com">Caucho</a>.
  * Quercus is distributed inside a Java EE compliant application server called Resin. Resin gives
  * you the flexibility of writing PHP applications that have access to the Java ecosystem, and is
  * many times more efficient than running PHP in Apache.</p>
@@ -78,11 +79,18 @@ public class PHP {
 		this(url, PHP.class.getClassLoader());
 	}
 	
-	private Path root;
 	private QuercusPage main;
 	
+	/** 
+	 * Create an empty instance of <code>PHP</code>. This instance can be used to execute arbitrary
+	 * snippets of PHP. But if you're looking to load a PHP library and execute snippets against that,
+	 * best to use one of the other constructors, {@link PHP(String)} or {@link PHP(String, ClassLoader)}
+	 */
+	public PHP() {}
+	
+	
 	/**
-	 * Initial a <code>PHP</code> wrapper with a specific <code>ClassLoader</code> instance. Refer
+	 * Initialize a <code>PHP</code> wrapper with a specific <code>ClassLoader</code> instance. Refer
 	 * to the doc for {@link PHP(String)} for a description of the <code>url</code> parameter.
 	 */
 	public PHP(String url, ClassLoader classLoader) {
@@ -97,39 +105,66 @@ public class PHP {
 		if (url.indexOf("classpath:/") == 0) {
 			URL resource = classLoader.getResource(url.substring(11));
 			File ref = new File(resource.getPath());
-			
-			if (ref.isDirectory()) {
-				root = new FilePath(ref.getAbsolutePath());
-			}
-			else {
-				File dir = ref.getParentFile();
-				if (dir != null)
-					root = new FilePath(ref.getParentFile().getAbsolutePath());
-					
-				try {
-					main = getQuercus().parse(new FilePath(ref.getAbsolutePath()));
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				
-				initEnv(main);
-			}
+			initByFile(ref);
 		}
 		
 		// remote script
 		else if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) {
-			
+			try {
+				StringBuilder script = new StringBuilder();
+				URLConnection conn = new URL(url).openConnection();
+				BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				String line;
+				while ((line = in.readLine()) != null) {
+					script.append(line);
+					script.append("\n");
+				}
+				
+				snippet(script.toString());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 		
 		// file reference
 		else {
-			
+			initByFile(new File(url));
 		}
 		
 	}
 	
-	public PHP() {
+	/**
+	 * Initialize a <code>PHP</code> wrapper with a specific <code>File</code> loaded by the host.
+	 * @param file A file full of PHP script
+	 */
+	public PHP(File file) {
+		initByFile(file);
+	}
+	
+	private void initByFile(File ref) {
+		if (!ref.exists()) {
+			throw new RuntimeException(new FileNotFoundException("No PHP file or directory at ["+ref.getAbsolutePath()+"]"));
+		}
 		
+		if (ref.isDirectory()) {
+			snippet("");
+			getEnv().setPwd(new FilePath(ref.getAbsolutePath()));
+		}
+		else {
+			try {
+				main = getQuercus().parse(new FilePath(ref.getAbsolutePath()));
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			
+			initEnv(main);
+			
+			File dir = ref.getParentFile();
+			if (dir != null)
+				getEnv().setPwd(new FilePath(ref.getParentFile().getAbsolutePath()));
+			
+			main.executeTop(getEnv());
+		}
 	}
 	
 	private Env env;
@@ -156,8 +191,9 @@ public class PHP {
 			
 			env = getQuercus().createEnv(page, ws, request, response);
 			
-			set("request", request);
-			set("response", response);
+			env.setPwd(new FilePath(System.getProperty("user.dir")));
+			
+			env.start();
 		}
 	}
 	
@@ -179,64 +215,84 @@ public class PHP {
 	 * @param obj The value to store there
 	 */
 	public PHP set(String name, Object obj) {
-		env.setGlobalValue(name, env.wrapJava(obj));
+		snippet("");
+		getEnv().setGlobalValue(name, toValue(getEnv(), obj));
 		return this;
 	}
 	
-	public PHP require(String path) {
-		return require(path, true);
+	/**
+	 * Retrieve the value of a global varialbe in the PHP execution environment.
+	 * @param name The name of the global parameter tto read
+	 */
+	public PHPObject get(String name) {
+		snippet("");
+		return new PHPObject(getEnv(), getEnv().getGlobalValue(name));
 	}
 	
-	public PHP require(String path, boolean once) {
+	public static Value toValue(Env env, Object obj) {
+		if (obj == null)
+			return env.wrapJava(obj);
+		else if (obj instanceof PHPObject)
+			return ((PHPObject) obj).getValue();
+		else if (obj instanceof Value)
+			return (Value) obj;
+		else 
+			return env.wrapJava(obj);
+	}
+	
+	public PHP snippet(String snippet) {
+		try {
+			QuercusPage page = getQuercus().parse(StringStream.open(snippet));
+			initEnv(page);
+			page.executeTop(getEnv());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
 		return this;
 	}
 	
-	public PHP include(String path) {
-		return include(path, true);
+	public String toString() {
+		if (env != null) {
+			try {
+				ws.flush();
+				return response.getContentAsString();
+			} catch (UnsupportedEncodingException e) {
+				throw new RuntimeException(e);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		else {
+			return null;
+		}
 	}
 	
-	public PHP include(String path, boolean once) {
+	/**
+	 * Clear any text buffered by script execution, presumably in preparation for
+	 * executing another PHP snippet.
+	 * @return This instance of <code>PHP</code>, to support method chaining.
+	 */
+	public PHP clear() {
+		response.setCommitted(false);
+		response.reset();
 		return this;
 	}
 	
-	public PHP inject(String path) {
-		return this;
-	}
-	
-	public void snippet(String snippet) {
-		
-	}
-	
-	public String run() {
-		
-		
-		
-		return null;
-	}
-	
-	public String run(String snippet) {
-		return null;
-	}
-	
-	public Value execute(String snippet) {
-		
-		return null;
-	}
-	
-	public Value fx(String fxName, Object ... args) {
+	public PHPObject fx(String fxName, Object ... args) {
 		if (args != null && args.length > 0) {
 			Value[] values = new Value[args.length];
 			for (int i=0; i<args.length; i++)
-				values[i] = getEnv().wrapJava(args[i]);
+				values[i] = toValue(getEnv(), args[i]);
 				
-			return getEnv().call(fxName, values);
+			return new PHPObject(getEnv(), getEnv().call(fxName, values));
 		}
 		else {
-			return getEnv().call(fxName);
+			return new PHPObject(getEnv(), getEnv().call(fxName));
 		}
 	}
 	
-	public Object newInstance(String className, Object ... args) {
+	public PHPObject newInstance(String className, Object ... args) {
 		QuercusClass clazz = getEnv().findClass(className);
 		if (clazz == null)
 			throw new RuntimeException(new ClassNotFoundException("PHP:"+className));
@@ -244,12 +300,12 @@ public class PHP {
 		if (args != null && args.length > 0) {
 			Value[] values = new Value[args.length];
 			for (int i=0; i<args.length; i++)
-				values[i] = getEnv().wrapJava(args[i]);
+				values[i] = toValue(getEnv(), args[i]);
 				
-			return clazz.callNew(getEnv(), values);
+			return new PHPObject(getEnv(), clazz.callNew(getEnv(), values));
 		}
 		else {
-			return clazz.callNew(getEnv(), new Value[]{});
+			return new PHPObject(getEnv(), clazz.callNew(getEnv(), new Value[]{}));
 		}
 	}
 	

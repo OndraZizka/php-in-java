@@ -52,6 +52,12 @@
       <version>2.5.6</version>
     </dependency>
 	
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-core</artifactId>
+      <version>2.5.6</version>
+    </dependency>
+	
 	<!-- groovy: -->
 	<dependency>
 	  <groupId>org.codehaus.groovy</groupId>
