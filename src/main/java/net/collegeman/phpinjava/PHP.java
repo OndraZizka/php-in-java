@@ -46,12 +46,14 @@ import org.springframework.mock.web.*;
  * <li>compile and cache arbitrary snippets of PHP, composed from within Java</li>
  * </ul>
  * <h3>Quercus and Resin versus PHP-in-Java</h3>
- * <p>Quercus is a PHP interpreter written and distributed by <a href="http://caucho.com">Caucho</a>.
- * Quercus is distributed inside a Java EE compliant application server called Resin. Resin gives
+ * <p>Our PHP-in-Java library is built on top of Quercus.</p>
+ * <p>Quercus is a PHP interpreter written in Java, distributed by <a href="http://caucho.com">Caucho</a>.
+ * Quercus is embedded inside a Java EE compliant application server called Resin. Resin gives
  * you the flexibility of writing PHP applications that have access to the Java ecosystem, and is
  * many times more efficient than running PHP in Apache.</p>
  * <p>If you want to make PHP libraries like <a href="http://github.com/collegeman/geshi4j">GeSHi</a>
  * available to your Java and Groovy code, our PHP-in-Java library is for you.</p>
+ * @author Aaron Collegeman aaron@collegeman.net
  */
 public class PHP {
 
@@ -84,14 +86,14 @@ public class PHP {
 	/** 
 	 * Create an empty instance of <code>PHP</code>. This instance can be used to execute arbitrary
 	 * snippets of PHP. But if you're looking to load a PHP library and execute snippets against that,
-	 * best to use one of the other constructors, {@link PHP(String)} or {@link PHP(String, ClassLoader)}
+	 * best to use one of the other constructors, {@link #PHP(String)} or {@link #PHP(String, ClassLoader)}
 	 */
 	public PHP() {}
 	
 	
 	/**
 	 * Initialize a <code>PHP</code> wrapper with a specific <code>ClassLoader</code> instance. Refer
-	 * to the doc for {@link PHP(String)} for a description of the <code>url</code> parameter.
+	 * to the doc for {@link #PHP(String)} for a description of the <code>url</code> parameter.
 	 */
 	public PHP(String url, ClassLoader classLoader) {
 		if (url == null || url.length() < 1)

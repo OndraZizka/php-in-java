@@ -18,6 +18,14 @@
 		  <target>1.5</target>
 		</configuration>
 	   </plugin>
+	   <plugin>
+	     <groupId>org.apache.maven.plugins</groupId>
+	     <artifactId>maven-javadoc-plugin</artifactId>
+	     <configuration>
+		   <reportOutputDirectory>${project.build.directory}/../</reportOutputDirectory>
+		   <destDir>javadoc</destDir>
+		 </configuration>
+	   </plugin>
     </plugins>
   </build>
 

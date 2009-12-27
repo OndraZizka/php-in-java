@@ -24,6 +24,7 @@ import com.caucho.quercus.env.*;
 /**
  * A thin wrapper around instances of <code>com.caucho.quercus.env.Value</code>, themselves representing
  * instances of PHP objects. This wrapper makes it easier to invoke methods and set and get properties.
+ * @author Aaron Collegeman aaron@collegeman.net
  */
 public class PHPObject {
 	
@@ -36,7 +37,12 @@ public class PHPObject {
 		this.wrapped = value;
 	}
 	
-	public PHPObject invokeMethod(String name, Object ... args) {
+	/**
+	 * Invoke the method <code>name</code> on wrapped <code>Value</code> object, passing
+	 * into the invocation parameters <code>args</code>.
+	 * @return An instance of <code>PHPObject</code>, wrapping any return value of <code>name</code>ed method.
+	 */
+	public final PHPObject invokeMethod(String name, Object ... args) {
 		if (args != null && args.length > 0) {
 			Value values[] = new Value[args.length];
 			for(int i=0; i<args.length; i++)
@@ -50,19 +56,23 @@ public class PHPObject {
 	}
 	
 	/**
-	 * Set a public property to <code>value</code>.
+	 * Set a public property of the wrapped <code>Value</code> to <code>value</code>.
 	 * @return This instance of <code>PHPObject</code>, to support method chaining.
 	 */
-	public PHPObject setProperty(String name, Object value) {
+	public final PHPObject setProperty(String name, Object value) {
 		wrapped.putField(env, new StringBuilderValue(name), PHP.toValue(env, value));
 		return this;
 	}
 	
-	public PHPObject getProperty(String name) {
+	/**
+	 * Retrieve a public property <code>name</code> of the wrapped <code>Value</code>.
+	 * @return A new instance of <code>PHPObject</code>, wrapping the retrieved property.
+	 */
+	public final PHPObject getProperty(String name) {
 		return new PHPObject(env, wrapped.getField(env, new StringBuilderValue(name)));
 	}
 	
-	public Value getValue() {
+	public Value getWrappedValue() {
 		return wrapped;
 	}
 	
