@@ -102,7 +102,6 @@ public class PHP {
 		if (classLoader == null)
 			throw new IllegalArgumentException("[classLoader] parameter must be defined");
 		
-			
 		// classpath reference
 		if (url.indexOf("classpath:/") == 0) {
 			URL resource = classLoader.getResource(url.substring(11));
@@ -113,16 +112,8 @@ public class PHP {
 		// remote script
 		else if (url.indexOf("http://") == 0 || url.indexOf("https://") == 0) {
 			try {
-				StringBuilder script = new StringBuilder();
 				URLConnection conn = new URL(url).openConnection();
-				BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String line;
-				while ((line = in.readLine()) != null) {
-					script.append(line);
-					script.append("\n");
-				}
-				
-				snippet(script.toString());
+				initByInputStream(conn.getInputStream());
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -141,6 +132,22 @@ public class PHP {
 	 */
 	public PHP(File file) {
 		initByFile(file);
+	}
+	
+	private void initByInputStream(InputStream stream) {
+		try {
+			StringBuilder sourceCode = new StringBuilder(1024);
+			BufferedReader in = new BufferedReader(new InputStreamReader(stream));
+			char[] buffer = new char[1024];
+			int read = 0;
+			while ((read = in.read(buffer)) != -1)
+				sourceCode.append(buffer, 0, read);
+			in.close();
+			
+			snippet(sourceCode.toString());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	private void initByFile(File ref) {

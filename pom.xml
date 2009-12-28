@@ -4,7 +4,7 @@
   <groupId>net.collegeman.phpinjava</groupId>
   <artifactId>php-in-java</artifactId>
   <packaging>jar</packaging>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <name>php-in-java</name>
   <url>http://aaroncollegeman.com/projects/php-in-java</url>
 
@@ -75,17 +75,22 @@
 	
 	<!-- quercus: -->
 	<dependency>
-	  <groupId>com.coucho</groupId>
+	  <groupId>com.caucho</groupId>
 	  <artifactId>quercus</artifactId>
 	  <version>3.1</version>
     </dependency>
+	<dependency>
+	  <groupId>com.caucho</groupId>
+	  <artifactId>resin</artifactId>
+	  <version>3.1</version>
+    </dependency>
     <dependency>
-	  <groupId>com.coucho</groupId>
+	  <groupId>com.caucho</groupId>
 	  <artifactId>resin-support</artifactId>
 	  <version>3.1</version>
     </dependency>
     <dependency>
-	  <groupId>com.coucho</groupId>
+	  <groupId>com.caucho</groupId>
 	  <artifactId>resin-util</artifactId>
 	  <version>3.1</version>
 	</dependency>
