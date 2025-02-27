@@ -52,7 +52,7 @@ simple file path), or remotely via HTTP.
 	
 Once loaded into memory, several execution options become available to you.
 
-####Calling global functions
+#### Calling global functions
 
 Like so
 
@@ -201,7 +201,7 @@ The return type of `myPHP.someOtherMethod(args)` will be another instance of `Gr
 thus allowing for the same dynamic approach to interfaces provided by the Groovy-powered
 instance of `MyPHPClass`.
 
-###What's next?
+### What's next?
 
 For the time being, our `PHP` and `GroovyPHP` classes adapt only the most useful 
 aspects of the Quercus interpreter API. Missing from our implementation are
