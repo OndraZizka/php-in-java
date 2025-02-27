@@ -1,8 +1,8 @@
-#PHP-in-Java: execute PHP code from within Java and Groovy
+# PHP-in-Java: execute PHP code from within Java and Groovy
 
-##Introduction
+## Introduction
 
-###Why would I want to execute PHP from within my Java code?
+### Why would I want to execute PHP from within my Java code?
 
 As a consultant, I have spent a lot of time moving back and forth between two Open Source
 communities: Java and PHP. Despite some major criticisms against its verbosity and depth,
@@ -21,7 +21,7 @@ features of the other. For some time now it has been possible to access [Java co
 within PHP](http://www.php.net/manual/en/java.examples-basic.php). But accessing PHP from
 within Java has never been as straight-forward.
 
-###So, how does it work?
+### So, how does it work?
 
 As it turns out, years ago an enterprising company named [Caucho](http://caucho.com) 
 decided to write the "most reliable application server in the Open Source market." Their
@@ -35,14 +35,14 @@ access to my favorite PHP libraries from within Java.  As it turns out, this is 
 I've recently pushed out my first Java-wrapped PHP library: [GeSHi4J](http://github.com/collegeman/geshi4j),
 making my favorite HTML-based code highlighting library available to me in any Java application!
 
-##Writing Your Own Wrappers
+## Writing Your Own Wrappers
 
-###Using the PHP wrapper API
+### Using the PHP wrapper API
 
 The following examples, while not practical on an individual basis, should be used in
 combination to create great PHP wrappers.
 
-####Executing a PHP script
+#### Executing a PHP script
 
 PHP scripts may be loaded from the classpath (my personal favorite, as the scripts end up packed 
 with the Java code in a JAR file), loaded from the local file system (by a `File` object or a
@@ -76,7 +76,7 @@ The return type of the `fx(String, Object ... args)` method is an instance of ou
 
 Extra line of text here to create whitespace between unordered list and H4. :-P
  
-####Setting and reading global variables
+#### Setting and reading global variables
 
 	// write
 	php.set("variable_name", value);
@@ -84,7 +84,7 @@ Extra line of text here to create whitespace between unordered list and H4. :-P
 	// read
 	PHPObject value = php.get("variable_name");
 	
-####Instantiating PHP classes
+#### Instantiating PHP classes
 
 	// create instance
 	PHPObject myInstance = php.newInstance("MyPHPClass", arg1, arg2, ...);
@@ -96,7 +96,7 @@ Extra line of text here to create whitespace between unordered list and H4. :-P
 	// invoke methods
 	PHPObject returnValue = myInstance.invokeMethod("methodName", arg1, arg2, ...);
 	
-####Capturing the output of your script
+#### Capturing the output of your script
 
 	// load a script
 	PHP myScript = new PHP("classpath:/path/to/myscript.php");
@@ -120,7 +120,7 @@ Extra line of text here to create whitespace between unordered list and H4. :-P
 	php.snippet("my_function('foo', 'bar');");
 	String output = php.toString();
 	
-###Strategy for composing wrappers
+### Strategy for composing wrappers
 
 The best pattern for implementing a wrapper with PHP-in-Java is the *Adapter* pattern, bar none. 
 
@@ -153,7 +153,7 @@ The best example for writing your own wrapper is my wrapper for GeSHi: [GeSHi4J]
 If you've written your own PHP wrapper with PHP-in-Java, [follow me on Twitter](http://twitter.com/collegeman) or [GitHub](http://github.com/collegeman),
 and message me with the URL to your own project.
 
-###GroovyPHP and GroovyPHPObject
+### GroovyPHP and GroovyPHPObject
 
 For you Groovy developers, we've made your job even easier. If you build your adapter on
 top of our own Groovy adaptations of `PHP` and `PHPObject`, then your work is practically
